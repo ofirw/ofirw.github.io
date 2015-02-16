@@ -7,9 +7,9 @@ It's an excellent tool that helps on both productivity and maintaining clean cod
 Imagine having to followin code:
 
 [source,C#]
-bool b=MustEvaluate1();
+bool b = MustEvaluate1();
 if (MustEvaluate2())
-   b=true;
+   b = true;
    
 Surely, both of the _MustEvaluate_ functions *will get evaluated*.
    
