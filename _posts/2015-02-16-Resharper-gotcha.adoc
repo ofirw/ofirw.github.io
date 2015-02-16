@@ -1,29 +1,31 @@
 = Resharper gotcha
 
-== "Clean-Code-oholic"
-I love to work with
- Resharper. It's an excellent tool that helps on both productivity and producing clean code. I'm a "clean-code-oholic". It's something that i really care about and invest significant amount of time on it.
+I love to work with Resharper. +
+It's an excellent tool that helps on both productivity and maintaining clean code. But, as always there are some gotchas. Here is one of them.
 
-== Beware: Convert to '||'
-When having  a code like:
+== Gotcha: Convert if to '||'
+Imagine having to followin code:
 
 [source,C#]
 bool b=MustEvaluate1();
 if (MustEvaluate2())
    b=true;
    
-On the upper example both MustEvaluate functions will get evaluated.
+Surely, both of the _MustEvaluate_ functions *will get evaluated*.
    
-Resharper offers to convert this to '||' expression, and the outcome is:
+Resharper, however, offers to convert this to a '||' expression, and the outcome is:
 [source,C#]
 bool b = MustEvaluate1() || MustEvaluate2(); 
 
 *This is not the same!*
 
-If the left side (MustEvaluate1) returns true, The rigt side will not get evaluated and that might not be what you wanted.
+If the left side (MustEvaluate1) returns true, The rigt side will not get evaluated and that might not be what you wanted. +
+This is somewhat disturbing because i was under the _wrong_ impression that Resharper suggestions will not change the behaviour of the code.
 
-Instead you could convert to the old '|' expression:
+Instead you could convert to the old '|' expression (which Resharper doesn't offer):
 [source,C#]
 bool b = MustEvaluate1() | MustEvaluate2(); 
+
+This will ensure that both functions will be evaluated no matter what is the result on the firt one.
 
 This is shorter, readable and inline with the original code.
