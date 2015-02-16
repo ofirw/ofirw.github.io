@@ -32,14 +32,14 @@
     <meta property="og:site_name" content="OW-Software" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content="Resharper gotcha" />
-    <meta property="og:description" content="&quot;Clean-Code-oholic&quot; I love to work with  Resharper. It&amp;#8217;s an excellent tool that helps on both productivity and producing clean code. I&amp;#8217;m a &quot;clean-code-oholic&quot;. It&amp;#8217;s something that i really care about and invest significant amount..." />
+    <meta property="og:description" content="I love to work with Resharper. It&amp;#8217;s an excellent tool that helps on both productivity and maintaining clean code. But, as always there are some gotchas. Here is one of them. Gotcha: Convert if to &#x27;||&#x27; Imagine..." />
     <meta property="og:url" content="http://ofirw.github.io/2015/02/16/Resharper-gotcha.html" />
     <meta property="article:published_time" content="2015-02-15T22:00:00.000Z" />
-    <meta property="article:modified_time" content="2015-02-16T13:47:22.541Z" />
+    <meta property="article:modified_time" content="2015-02-16T16:25:43.184Z" />
     
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Resharper gotcha" />
-    <meta name="twitter:description" content="&quot;Clean-Code-oholic&quot; I love to work with  Resharper. It&amp;#8217;s an excellent tool that helps on both productivity and producing clean code. I&amp;#8217;m a &quot;clean-code-oholic&quot;. It&amp;#8217;s something that i really care about and invest significant amount..." />
+    <meta name="twitter:description" content="I love to work with Resharper. It&amp;#8217;s an excellent tool that helps on both productivity and maintaining clean code. But, as always there are some gotchas. Here is one of them. Gotcha: Convert if to &#x27;||&#x27; Imagine..." />
     <meta name="twitter:url" content="http://ofirw.github.io/2015/02/16/Resharper-gotcha.html" />
     
     <script type="application/ld+json">
@@ -57,8 +57,8 @@
     "headline": "Resharper gotcha",
     "url": "http://ofirw.github.io/2015/02/16/Resharper-gotcha.html",
     "datePublished": "2015-02-15T22:00:00.000Z",
-    "dateModified": "2015-02-16T13:47:22.541Z",
-    "description": "&quot;Clean-Code-oholic&quot; I love to work with  Resharper. It&amp;#8217;s an excellent tool that helps on both productivity and producing clean code. I&amp;#8217;m a &quot;clean-code-oholic&quot;. It&amp;#8217;s something that i really care about and invest significant amount..."
+    "dateModified": "2015-02-16T16:25:43.184Z",
+    "description": "I love to work with Resharper. It&amp;#8217;s an excellent tool that helps on both productivity and maintaining clean code. But, as always there are some gotchas. Here is one of them. Gotcha: Convert if to &#x27;||&#x27; Imagine..."
 }
     </script>
 
@@ -169,20 +169,19 @@
     </header>
 
     <section class="post">
-      <div class="sect1">
-<h2 id="__clean_code_oholic">"Clean-Code-oholic"</h2>
+      <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>I love to work with
- Resharper. It&#8217;s an excellent tool that helps on both productivity and producing clean code. I&#8217;m a "clean-code-oholic". It&#8217;s something that i really care about and invest significant amount of time on it.</p>
+<p>I love to work with Resharper.<br>
+It&#8217;s an excellent tool that helps on both productivity and maintaining clean code. But, as always there are some gotchas. Here is one of them.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_beware_convert_to">Beware: Convert to '||'</h2>
+<h2 id="_gotcha_convert_if_to">Gotcha: Convert if to '||'</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>When having  a code like:</p>
+<p>Imagine having to followin code:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -192,10 +191,10 @@ if (MustEvaluate2())
 </div>
 </div>
 <div class="paragraph">
-<p>On the upper example both MustEvaluate functions will get evaluated.</p>
+<p>Surely, both of the <em>MustEvaluate</em> functions <strong>will get evaluated</strong>.</p>
 </div>
 <div class="paragraph">
-<p>Resharper offers to convert this to '||' expression, and the outcome is:</p>
+<p>Resharper, however, offers to convert this to a '||' expression, and the outcome is:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -206,15 +205,19 @@ if (MustEvaluate2())
 <p><strong>This is not the same!</strong></p>
 </div>
 <div class="paragraph">
-<p>If the left side (MustEvaluate1) returns true, The rigt side will not get evaluated and that might not be what you wanted.</p>
+<p>If the left side (MustEvaluate1) returns true, The rigt side will not get evaluated and that might not be what you wanted.<br>
+This is somewhat disturbing because i was under the <em>wrong</em> impression that Resharper suggestions will not change the behaviour of the code.</p>
 </div>
 <div class="paragraph">
-<p>Instead you could convert to the old '|' expression:</p>
+<p>Instead you could convert to the old '|' expression (which Resharper doesn&#8217;t offer):</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-C#" data-lang="C#">bool b = MustEvaluate1() | MustEvaluate2();</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>This will ensure that both functions will be evaluated no matter what is the result on the firt one.</p>
 </div>
 <div class="paragraph">
 <p>This is shorter, readable and inline with the original code.</p>
