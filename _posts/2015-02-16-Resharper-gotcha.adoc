@@ -1,4 +1,29 @@
-= Blog Title
-:hp-tags: tag1,tag2,tag3
+= Resharper gotcha
 
-This is shit
+== "Clean-Code-oholic"
+I love to work with
+ Resharper. It's an excellent tool that helps on both productivity and producing clean code. I'm a "clean-code-oholic". It's something that i really care about and invest significant amount of time on it.
+
+== Beware: Convert to '||'
+When having  a code like:
+
+[source,C#]
+bool b=MustEvaluate1();
+if (MustEvaluate2())
+   b=true;
+   
+On the upper example both MustEvaluate functions will get evaluated.
+   
+Resharper offers to convert this to '||' expression, and the outcome is:
+[source,C#]
+bool b = MustEvaluate1() || MustEvaluate2(); 
+
+*This is not the same!*
+
+If the left side (MustEvaluate1) returns true, The rigt side will not get evaluated and that might not be what you wanted.
+
+Instead you could convert to the old '|' expression:
+[source,C#]
+bool b = MustEvaluate1() | MustEvaluate2(); 
+
+This is shorter, readable and inline with the original code.
