@@ -1,0 +1,14 @@
+= PInvoke - Getting string from callbacks
+:published_at: 2015-02-20
+
+== Ways to get back values from an external method
+
+. Using the passed parameter as pointer
+. Using the return of the metod
+. Using a call back (delegate that was passed to the function)
+
+=== Using the passed parameter as pointer
+
+=== Using the return of the metod
+
+=== Using a call back (delegate that was passed to the function)
