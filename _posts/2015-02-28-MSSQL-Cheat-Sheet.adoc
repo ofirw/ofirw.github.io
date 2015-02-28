@@ -1,7 +1,10 @@
 = MSSQL Cheat Sheet
 
-*Rename Table*::
+
+---
+.Rename Table 
 `EXEC sp_rename 'CURRENT', 'NEW'`
 
-NOTE: Renaming a table will not automatically rename references to that table. You must manually modify any objects that reference the renamed table. For example, if you rename a table and that table is referenced in a trigger, you must modify the trigger to reflect the new table name. Use link:https://msdn.microsoft.com/en-us/library/bb677315.aspx[sys.sql_expression_dependencies] to list dependencies on the table before renaming it.
+CAUTION: Renaming a table will not automatically rename references to that table. You must manually modify any objects that reference the renamed table. For example, if you rename a table and that table is referenced in a trigger, you must modify the trigger to reflect the new table name. Use link:https://msdn.microsoft.com/en-us/library/bb677315.aspx[sys.sql_expression_dependencies] to list dependencies on the table before renaming it.
 
+---
