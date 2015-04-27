@@ -1,5 +1,6 @@
 = Resharper gotcha
 :published_at: 2015-02-01
+:hp-tags: Resharper
 
 I love to work with Resharper. +
 It's an excellent tool that helps on both productivity and maintaining clean code. But, as always there are some gotchas. Here is one of them.
