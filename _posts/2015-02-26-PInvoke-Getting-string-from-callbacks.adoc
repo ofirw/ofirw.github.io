@@ -1,3 +1,0 @@
-= PInvoke - Getting string from callbacks
-
-Often when working with 3rd party dlls we
