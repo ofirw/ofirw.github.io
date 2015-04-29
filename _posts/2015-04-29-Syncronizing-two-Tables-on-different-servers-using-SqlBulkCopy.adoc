@@ -1,0 +1,39 @@
+= Syncronizing two Tables on different servers using SqlBulkCopy
+
+:hp-tags: Sql, SqlBulkCopy, C#
+
+I came across an intresting issue last week. +
+We had a working code that syncronized local table with from remote one.
+
+The concept of the code was simple: +
+Since we needed to update existing rows and not only insert, we have a 'row_version' column that is uniq through the db and controlled by the remote db (the reference db). +
+The remote will only send the deltas and on the local machine we iterate over all received records, check for each one if it exists and require update or it's a new record and should be inserted.
+
+This worked well at the begining when we had 10-100 rows that were changed. +
+But then, we had  syncronization of 100,000 rows. +
+*This took 40 Minutes.*
+
+.The old code
+[source, C#]
+fdfsf
+fdsfdsf
+fdsfsd
+
+==== The new concept
+
+I understood that I have to load the rows into the db as fast as possible and this can be acheived using BCP.
+So, using SqlBulkCopy I loaded all rows into a temp table.
+The update/insert done using 3 queries:
+
+. Add a column to the temp table and mark all records that exists on the real table.
+. Update query
+. Insert query
+
+*The total runtime is now reduced to 40 Seconds!!*
+
+.The new code
+[source, C#]
+ddsf
+dfsdf
+fsdf
+
