@@ -1,4 +1,5 @@
 = Resharper gotcha
+
 :published_at: 2015-02-01
 :hp-tags: Resharper
 
