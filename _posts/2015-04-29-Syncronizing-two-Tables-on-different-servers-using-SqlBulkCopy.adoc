@@ -33,7 +33,21 @@ The update/insert done using 3 queries:
 
 .The new code
 [source, C#]
-ddsf
-dfsdf
-fsdf
+using (SqlConnection conn = this.GetNewOpenedConnection())
+{
+  string tempTable = string.Format("T_{0}", dataTable.TableName);
+  SqlCommand command = conn.CreateCommand();
+  command.CommandText = string.Format(@"IF (NOT EXISTS (SELECT 1 
+  			FROM INFORMATION_SCHEMA.TABLES 
+  			WHERE TABLE_NAME = '{0}')) 
+  			BEGIN 
+  			select * into {0} from {1} where 1=2 
+  			END", tempTable, dataTable.TableName); 
+  command.ExecuteNonQuery();
+  using (SqlBulkCopy copy = new SqlBulkCopy(conn))
+  {
+  	copy.DestinationTableName = tempTable;
+  	copy.WriteToServer(dataTable);
+  }
+}
 
