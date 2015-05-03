@@ -83,6 +83,5 @@ public void FinishFastCopy(string tableName)
       command.ExecuteNonQuery();
       command.CommandText = string.Format("DROP TABLE {0}", TempTableName);
       command.ExecuteNonQuery();
-      this.UpdadeSyncManagerTable(tableName, this.getTableLastRowVersion(tableName));
-            }
-        }
+   }
+}
