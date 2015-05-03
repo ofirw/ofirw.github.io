@@ -54,34 +54,18 @@ using (SqlConnection conn = this.GetNewOpenedConnection())
 
 .The new code - Update/Insert from Temp table
 [source, C#]
-public void FinishFastCopy(string tableName)
-{
-   string TempTableName = string.Format("T_{0}", tableName);
-   using (var conn = this.GetNewOpenedConnection())
-   {
-      var command = conn.CreateCommand();
-      command.CommandText = string.Format(@"SELECT count(1)
-      				FROM INFORMATION_SCHEMA.TABLES 
-                                WHERE TABLE_NAME = '{0}'", TempTableName);
-      if ((int)command.ExecuteScalar() != 1) return;
-      command.CommandText = string.Format("select * from {0} where 1=2", TempTableName);
-      List<string> columnsName;
-      using (var sqlDataReader = command.ExecuteReader())
-      {
-         columnsName = sqlDataReader.GetSchemaTable().Rows.Cast<DataRow>().Where(row => row["ColumnName"].ToString() != "AUTOID").Select(row => row["ColumnName"].ToString()).ToList();
-      }
-      command.CommandText = string.Format("ALTER TABLE {0} add for_update bit", TempTableName);
-      command.ExecuteNonQuery();
-      command.CommandText = string.Format("update {0}  set for_update=1 where EXISTS (select 1 from {1} h where h.GUID = {0}.GUID)", TempTableName, tableName);
-      command.ExecuteNonQuery();
-      var commaSeperateColumns = string.Join(",", columnsName);    
-      command.CommandText = string.Format(@"insert into {0} ({1}) select {1} from {2} as t where t.for_update is null", tableName, commaSeperateColumns, TempTableName);
-      command.ExecuteNonQuery();
-      var setCol = columnsName.Select(s => string.Format("{0}=t.{0}", s));
-      var commaSeparatedSetCol = string.Join(",", setCol);
-      command.CommandText = string.Format("update {0} SET {1} FROM {0} inner join {2} as t ON {0}.GUID=t.GUID where t.for_update=1", tableName,commaSeparatedSetCol,TempTableName);
-      command.ExecuteNonQuery();
-      command.CommandText = string.Format("DROP TABLE {0}", TempTableName);
-      command.ExecuteNonQuery();
-   }
-}
+...
+command.CommandText = string.Format("ALTER TABLE {0} add for_update bit", TempTableName);
+command.ExecuteNonQuery();
+command.CommandText = string.Format("update {0}  set for_update=1 where EXISTS (select 1 from {1} h where h.GUID = {0}.GUID)", TempTableName, tableName);
+command.ExecuteNonQuery();
+.... // Setting columnsNames array logic
+var commaSeperateColumns = string.Join(",", columnsName);    
+command.CommandText = string.Format(@"insert into {0} ({1}) select {1} from {2} as t where t.for_update is null", tableName, commaSeperateColumns, TempTableName);
+command.ExecuteNonQuery();
+var setCol = columnsName.Select(s => string.Format("{0}=t.{0}", s));
+var commaSeparatedSetCol = string.Join(",", setCol);
+command.CommandText = string.Format("update {0} SET {1} FROM {0} inner join {2} as t ON {0}.GUID=t.GUID where t.for_update=1", tableName,commaSeparatedSetCol,TempTableName);
+command.ExecuteNonQuery();
+command.CommandText = string.Format("DROP TABLE {0}", TempTableName);
+command.ExecuteNonQuery();
